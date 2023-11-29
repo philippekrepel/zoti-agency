@@ -1,2 +1,5 @@
 Flask
 Gunicorn
+openai
+requests
+packaging
