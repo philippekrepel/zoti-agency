@@ -84,6 +84,10 @@ def check_run_status():
   if completed:
     messages = client.beta.threads.messages.list(thread_id=thread_id)
     message_content = messages.data[0].content[0].text
+
+    if len(message_content) >= 2100:
+      messages = messages[:2100]
+      
     # Remove annotations
     annotations = message_content.annotations
     for annotation in annotations:
