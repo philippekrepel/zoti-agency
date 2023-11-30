@@ -84,9 +84,6 @@ def check_run_status():
   if completed:
     messages = client.beta.threads.messages.list(thread_id=thread_id)
     message_content = messages.data[0].content[0].text
-
-    if len(message_content) >= 2100:
-      messages = messages[:2100]
       
     # Remove annotations
     annotations = message_content.annotations
@@ -95,7 +92,7 @@ def check_run_status():
           annotation.text, '')
     print("Run completed, returning response")
     return jsonify({
-        "response": message_content.value,
+        "response": message_content.value[:2100],
         "status": "completed"
     })
 
