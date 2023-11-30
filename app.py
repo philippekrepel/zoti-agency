@@ -92,8 +92,8 @@ def check_run_status():
           annotation.text, '')
     print("Run completed, returning response")
     final_msg = message_content.value
-    if len(final_msg) > 2100:
-      final_msg = final_msg[:2100]
+    if len(final_msg) > 999:
+      final_msg = final_msg[:999]
     return jsonify({
         "response": final_msg,
         "status": "completed"
