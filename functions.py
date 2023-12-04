@@ -71,5 +71,3 @@ def check_availability_and_reserve(number_of_guests, reservation_start):
     else:
         # No available table
         return False
-
-check_availability_and_reserve(9, "2023-11-10T20:00:00")
