@@ -16,6 +16,7 @@ def get_standard_duration(number_of_guests):
         return 2.5  # Duration for 7+ people
 
 def check_availability_and_reserve(number_of_guests, reservation_start):
+    print(reservation_start)
     reservation_start = datetime.strptime(reservation_start, '%Y-%m-%dT%H:%M:%S')
     duration = get_standard_duration(number_of_guests)
     reservation_end = reservation_start + timedelta(hours=duration)
