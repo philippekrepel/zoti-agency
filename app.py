@@ -83,7 +83,7 @@ def check_run_status():
       print("Action...")
       tool_output_array = []
     # write logic for function calling
-      for tool_call in run.required_action.submit_tool_outputs.tool_calls:
+      for tool_call in run_status.required_action.submit_tool_outputs.tool_calls:
         print("hello")
         tool_call_id = tool_call.id
         function_name = tool_call.function.name
