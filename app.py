@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify
 import openai
 from openai import OpenAI
 import requests
+import functions
 
 from packaging import version
 
@@ -24,7 +25,6 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 # Load assistant ID from file or create new one
 assistant_id = "asst_oxk06TWR6Q3arNofK68dKjm1"
 print("Assistant created with ID:", assistant_id)
-
 
 # Create thread
 @app.route('/start', methods=['GET'])
@@ -70,7 +70,7 @@ def check_run_status():
 
   completed = False
   start_time = time.time()
-  while time.time() - start_time < 5:
+  while time.time() - start_time < 9:
     run_status = client.beta.threads.runs.retrieve(thread_id=thread_id,
                                                    run_id=run_id)
     print("Checking run status:", run_status.status)
@@ -78,6 +78,11 @@ def check_run_status():
     if run_status.status == 'completed':
       completed = True
       break
+
+    elif run_status.status == 'requires_action':
+      return jsonify({
+        "status": "requires_action"
+      })
 
     time.sleep(0.5)
 
@@ -90,10 +95,14 @@ def check_run_status():
     for annotation in annotations:
       message_content.value = message_content.value.replace(
           annotation.text, '')
+
     print("Run completed, returning response")
+
     final_msg = message_content.value
+
     if len(final_msg) > 999:
       final_msg = final_msg[:999]
+
     return jsonify({
         "response": final_msg,
         "status": "completed"
@@ -101,3 +110,47 @@ def check_run_status():
 
   print("Run timed out")
   return jsonify({"response": "timeout"})
+
+@app.route('/action_functions', methods=['POST'])
+def run_functions():
+
+  data = request.json
+  thread_id = data.get('thread_id')
+  run_id = data.get('run_id')
+  if not thread_id or not run_id:
+    print("Error: Missing thread_id or run_id in /check")
+    return jsonify({"response": "error"})
+    
+  tool_output_array = []
+    # write logic for function calling
+  for tool_call in run_status.required_action.submit_tool_outputs.tool_calls:
+    tool_call_id = tool_call.id
+    function_name = tool_call.function.name
+    function_arg = tool_call.function.arguments
+
+
+
+    if tool_call.function.name == "checkAvailabilityAndReserve":
+        # Extract arguments
+        args = json.loads(tool_call.function.arguments)
+        number_of_guests = args["number_of_guests"]
+        reservation_start = args["reservation_start"]
+
+        # Call your function
+        output = functions.check_availability_and_reserve(number_of_guests, reservation_start)
+
+    tool_output_array.append({"tool_call_id": tool_call_id, "output": output})
+
+
+  run = client.beta.threads.runs.submit_tool_outputs(
+    thread_id = thread.id,
+    run_id=run.id,
+    tool_outputs=tool_output_array
+  )
+
+  return jsonify({
+    "run_id": run.id,
+    "status": run.status
+  })
+
+
