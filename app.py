@@ -114,6 +114,8 @@ def check_run_status():
 @app.route('/action_functions', methods=['POST'])
 def run_functions():
 
+  print("Running functions")
+
   data = request.json
   thread_id = data.get('thread_id')
   run_id = data.get('run_id')
@@ -123,6 +125,8 @@ def run_functions():
 
   run_status = client.beta.threads.runs.retrieve(thread_id=thread_id,
                                                    run_id=run_id)
+
+  print(run_status)
     
   tool_output_array = []
     # write logic for function calling
@@ -134,13 +138,14 @@ def run_functions():
 
 
     if tool_call.function.name == "checkAvailabilityAndReserve":
-        # Extract arguments
-        args = json.loads(tool_call.function.arguments)
-        number_of_guests = args["number_of_guests"]
-        reservation_start = args["reservation_start"]
+      print("Calling {}".format(tool_call.function.name))
+      # Extract arguments
+      args = json.loads(tool_call.function.arguments)
+      number_of_guests = args["number_of_guests"]
+      reservation_start = args["reservation_start"]
 
-        # Call your function
-        output = functions.check_availability_and_reserve(number_of_guests, reservation_start)
+      # Call your function
+      output = functions.check_availability_and_reserve(number_of_guests, reservation_start)
 
     tool_output_array.append({"tool_call_id": tool_call_id, "output": output})
 
