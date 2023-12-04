@@ -124,7 +124,7 @@ def run_functions():
     return jsonify({"response": "error"})
 
   run_status = client.beta.threads.runs.retrieve(thread_id=thread_id,
-                                                   run_id=run_id)
+                                                   run_id=run_id).status
 
   print(run_status)
     
