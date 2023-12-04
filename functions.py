@@ -17,7 +17,11 @@ def get_standard_duration(number_of_guests):
 
 def check_availability_and_reserve(number_of_guests, reservation_start):
     print(reservation_start)
-    reservation_start = datetime.strptime(reservation_start, '%Y-%m-%dT%H:%M:%S.%fZ')
+    if reservation_start[-1] == "Z":
+        reservation_start = datetime.strptime(reservation_start, '%Y-%m-%dT%H:%M:%S.%fZ')
+    else:
+        reservation_start = datetime.strptime(reservation_start, '%Y-%m-%dT%H:%M:%S')
+        
     duration = get_standard_duration(number_of_guests)
     reservation_end = reservation_start + timedelta(hours=duration)
 
