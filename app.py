@@ -80,11 +80,37 @@ def check_run_status():
       break
 
     elif run_status.status == 'requires_action':
-      return jsonify({
-        "status": "requires_action"
-      })
+      print("Action...")
+      tool_output_array = []
+    # write logic for function calling
+      for tool_call in run.required_action.submit_tool_outputs.tool_calls:
+        print("hello")
+        tool_call_id = tool_call.id
+        function_name = tool_call.function.name
+        function_arg = tool_call.function.arguments
+    
+    
+    
+        if tool_call.function.name == "check_availability_and_reserve":
+          print("Calling {}".format(tool_call.function.name))
+          # Extract arguments
+          args = json.loads(tool_call.function.arguments)
+          number_of_guests = args["number_of_guests"]
+          reservation_start = args["reservation_start"]
+    
+          # Call your function
+          output = functions.check_availability_and_reserve(number_of_guests, reservation_start)
+    
+        tool_output_array.append({"tool_call_id": tool_call_id, "output": output})
+    
+    
+      client.beta.threads.runs.submit_tool_outputs(
+        thread_id = thread_id,
+        run_id=run_id,
+        tool_outputs=tool_output_array
+      )
 
-    time.sleep(0.5)
+    time.sleep(1)
 
   if completed:
     messages = client.beta.threads.messages.list(thread_id=thread_id)
