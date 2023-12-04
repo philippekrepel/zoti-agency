@@ -131,8 +131,8 @@ def run_functions():
   tool_output_array = []
     # write logic for function calling
   for tool_call in run_status.required_action.submit_tool_outputs.tool_calls:
-    print(tool_call_id)
     tool_call_id = tool_call.id
+    print(tool_call_id)
     function_name = tool_call.function.name
     function_arg = tool_call.function.arguments
 
