@@ -123,10 +123,10 @@ def run_functions():
     print("Error: Missing thread_id or run_id in /check")
     return jsonify({"response": "error"})
 
-  run_status = client.beta.threads.runs.retrieve(thread_id=thread_id,
-                                                   run_id=run_id).status
+  run = client.beta.threads.runs.retrieve(thread_id=thread_id,
+                                                   run_id=run_id)
 
-  print(run_status)
+  print(run.status)
     
   tool_output_array = []
     # write logic for function calling
