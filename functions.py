@@ -72,3 +72,12 @@ def check_availability_and_reserve(number_of_guests, reservation_start):
     else:
         # No available table
         return False
+
+def get_current_date_and_day():
+    # Get the current date and time
+    current_datetime = datetime.now()
+
+    # Format the date as "Day, Month Day, Year" (e.g., Monday, December 4, 2023)
+    formatted_date = current_datetime.strftime("%A, %B %d, %Y")
+
+    return formatted_date
