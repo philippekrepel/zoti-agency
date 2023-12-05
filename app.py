@@ -100,6 +100,10 @@ def check_run_status():
     
           # Call your function
           output = functions.check_availability_and_reserve(number_of_guests, reservation_start)
+
+        elif tool_call.function.name == "get_current_date_and_day":
+          print("Calling {}".format(tool_call.function.name))
+          output = functions.get_current_date_and_day()
     
         tool_output_array.append({"tool_call_id": tool_call_id, "output": output})
     
