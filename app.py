@@ -88,9 +88,7 @@ def check_run_status():
         tool_call_id = tool_call.id
         function_name = tool_call.function.name
         function_arg = tool_call.function.arguments
-    
-    
-    
+
         if tool_call.function.name == "check_availability_and_reserve":
           print("Calling {}".format(tool_call.function.name))
           # Extract arguments
