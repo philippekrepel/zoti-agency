@@ -23,7 +23,7 @@ app = Flask(__name__)
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Load assistant ID from file or create new one
-assistant_id = "asst_r9oJzz2FlAlWgjexz2wks8lk"
+assistant_id = "asst_wdEIBAZGD6TFwFgZJxPLsTef"
 print("Assistant created with ID:", assistant_id)
 
 # Create thread
